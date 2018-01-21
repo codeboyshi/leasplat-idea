@@ -27,8 +27,8 @@ import cn.shi.leasplat.service.NameOrPasswordException;
 import cn.shi.leasplat.service.UserService;
 import cn.shi.leasplat.util.Page;
 /**
- * 商品管理
- * @author Administrator shiqiang
+ * 商品管理git
+ * @author Administrator shiqiang commit date 2018/1/21
  *
  */
 import cn.shi.leasplat.util.Result;
