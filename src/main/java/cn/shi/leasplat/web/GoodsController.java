@@ -12,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import cn.shi.leasplat.annotation.Auditable;
+
 import cn.shi.leasplat.entity.File;
 import cn.shi.leasplat.entity.Goods;
 import cn.shi.leasplat.entity.GoodsClass;
@@ -28,7 +28,7 @@ import cn.shi.leasplat.service.UserService;
 import cn.shi.leasplat.util.Page;
 /**
  * 商品管理
- * @author Administrator
+ * @author Administrator shiqiang
  *
  */
 import cn.shi.leasplat.util.Result;
