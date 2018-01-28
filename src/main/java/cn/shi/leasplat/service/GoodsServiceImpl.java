@@ -1,6 +1,7 @@
 package cn.shi.leasplat.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,24 +35,43 @@ public class GoodsServiceImpl implements GoodsService{
 	public Page<Goods> findPage(Integer pageNo, Integer pageSize, String name) {
 		Page<Goods> page = new Page<Goods>(pageNo, pageSize);
 		List<Goods> list = goodsDao.findPage(page.getLimit(), page.getOffset(), name);
-		for (Goods goods : list)
-		{
-			// 查出商品类别，将商品类别名称赋值
-			GoodsClass goodsClass = goodsClassDao.getById( goods.getGoodsClassId() );
-			if(goodsClass != null) goods.setGoodsClassName(goodsClass.getName());
-			// 查出图片路径
-			List<GoodsImage> goodsImages = goodsImageDao.findByGoodsId(goods.getId());
-			if (goodsImages != null) goods.setImagePath(goodsImages);
-			// 查出用户名
-			User user = userDao.findUserById(goods.getUserId());
-			if (user != null)
-			{
-				user.setPassword("");
-				user.setSecretAnswer("");
-				user.setSecurity("");
-				goods.setUser(user);
+		list = list.stream().map(goods -> {
+				// 查出商品类别，将商品类别名称赋值
+				GoodsClass goodsClass = goodsClassDao.getById(goods.getGoodsClassId());
+				if (null != goodsClass) goods.setGoodsClassName(goodsClass.getName());
+				// 查出图片路径
+				List<GoodsImage> goodsImages = goodsImageDao.findByGoodsId(goods.getId());
+				if (goodsImages != null) goods.setImagePath(goodsImages);
+				// 查出用户名
+				User user = userDao.findUserById(goods.getUserId());
+				if (user != null)
+				{
+					user.setPassword("");
+					user.setSecretAnswer("");
+					user.setSecurity("");
+					goods.setUser(user);
+				}
+				return goods;
 			}
-		}
+		).collect(Collectors.toList());
+//		for (Goods goods : list)
+//		{
+//			// 查出商品类别，将商品类别名称赋值
+//			GoodsClass goodsClass = goodsClassDao.getById( goods.getGoodsClassId() );
+//			if(goodsClass != null) goods.setGoodsClassName(goodsClass.getName());
+//			// 查出图片路径
+//			List<GoodsImage> goodsImages = goodsImageDao.findByGoodsId(goods.getId());
+//			if (goodsImages != null) goods.setImagePath(goodsImages);
+//			// 查出用户名
+//			User user = userDao.findUserById(goods.getUserId());
+//			if (user != null)
+//			{
+//				user.setPassword("");
+//				user.setSecretAnswer("");
+//				user.setSecurity("");
+//				goods.setUser(user);
+//			}
+//		}
 		int count = goodsDao.getCount(name);
 		page.setTotalCount(count);
 		page.setResult(list);

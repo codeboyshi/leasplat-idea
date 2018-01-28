@@ -1,6 +1,7 @@
 package cn.shi.leasplat.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,14 +35,22 @@ public class SystemLogServiceImpl implements SystemLogService{
 		Page<SystemLog> page = new Page<SystemLog>(pageNo, pageSize);
 		List<SystemLog> logs = systemLogDAO.findPage(page.getLimit(), page.getOffset());
 		Integer count = systemLogDAO.getCount();
-		for (SystemLog log : logs)
-		{
+		logs = logs.stream().map((log) -> {
 			User user = userDao.findUserById(log.getUserId());
 			user.setPassword("");
 			user.setSecretAnswer("");
 			user.setSecurity("");
 			log.setUser(user);
-		}
+			return log;
+		}).collect(Collectors.toList());
+//		for (SystemLog log : logs)
+//		{
+//			User user = userDao.findUserById(log.getUserId());
+//			user.setPassword("");
+//			user.setSecretAnswer("");
+//			user.setSecurity("");
+//			log.setUser(user);
+//		}
 		page.setTotalCount(count);
 		page.setResult(logs);
 		return page;
